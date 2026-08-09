@@ -90,8 +90,10 @@ export function CoupleProvider({ children }: { children: ReactNode }) {
       refresh,
       createCouple: async (name) => {
         const result = await coupleService.createCouple(name, couple?.currency ?? 'EUR')
-        if (!result.error) await refresh()
-        return { error: result.error }
+        await refresh()
+        if (!result.error) return { error: null }
+        const alreadyIn = result.error.includes('Ya pertenecéis')
+        return { error: alreadyIn ? null : result.error }
       },
       invitePartner: coupleService.invitePartner,
       acceptInvite: async (token) => {

@@ -343,7 +343,7 @@ create trigger savings_goals_achieved_notify
 create or replace function public.is_couple_member(_couple_id uuid)
 returns boolean
 language sql
-security invoker
+security definer
 set search_path = public
 stable
 as $$

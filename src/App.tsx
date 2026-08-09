@@ -113,9 +113,11 @@ function App() {
                   <Route
                     path="/invite-partner"
                     element={
-                      <RequireNoCouple>
-                        <InvitePartnerPage />
-                      </RequireNoCouple>
+                      <RequireAuth>
+                        <RequireCouple>
+                          <InvitePartnerPage />
+                        </RequireCouple>
+                      </RequireAuth>
                     }
                   />
 
