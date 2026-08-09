@@ -64,7 +64,10 @@ export function RegisterPage() {
       footer={
         <>
           ¿Ya tenéis cuenta?{' '}
-          <Link to="/login" className="font-medium text-brand-700 dark:text-brand-400">
+          <Link
+            to={invitePath ? `/login?invite=${inviteToken}` : '/login'}
+            className="font-medium text-brand-700 dark:text-brand-400"
+          >
             Iniciar sesión
           </Link>
         </>

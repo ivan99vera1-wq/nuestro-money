@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,10 @@ export function LoginPage() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const from = (location.state as LocationState | null)?.from
+  const inviteToken = searchParams.get('invite')
+  const invitePath = inviteToken ? `/invite/${inviteToken}` : null
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -42,7 +45,7 @@ export function LoginPage() {
       setSubmitError(result.error)
       return
     }
-    navigate(from ?? '/dashboard', { replace: true })
+    navigate(invitePath ?? from ?? '/dashboard', { replace: true })
   }
 
   return (
@@ -50,7 +53,10 @@ export function LoginPage() {
       footer={
         <>
           ¿Todavía no tenéis cuenta?{' '}
-          <Link to="/register" className="font-medium text-brand-700 dark:text-brand-400">
+          <Link
+            to={invitePath ? `/register?invite=${inviteToken}` : '/register'}
+            className="font-medium text-brand-700 dark:text-brand-400"
+          >
             Crear cuenta
           </Link>
         </>
