@@ -24,7 +24,7 @@ interface CoupleContextValue {
   loading: boolean
   refresh: () => Promise<void>
   createCouple: (name: string) => Promise<{ error: string | null }>
-  invitePartner: (email: string) => Promise<{ error: string | null }>
+  invitePartner: (email: string) => Promise<coupleService.InviteResult>
   acceptInvite: (token: string) => Promise<coupleService.CoupleResult>
 }
 

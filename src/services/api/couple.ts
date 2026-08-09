@@ -83,9 +83,28 @@ export async function createCouple(
   return { error: error ? friendlyRpcError(error.message) : null, coupleId: data ?? undefined }
 }
 
-export async function invitePartner(email: string): Promise<{ error: string | null }> {
+export interface InviteResult {
+  error: string | null
+  /** Shareable link (`…#/invite/<token>`) for the pending invite. */
+  inviteUrl?: string | undefined
+}
+
+export async function invitePartner(email: string): Promise<InviteResult> {
   const { error } = await supabase.rpc('invite_partner', { _email: email.trim() })
-  return { error: error ? friendlyRpcError(error.message) : null }
+  if (error) return { error: friendlyRpcError(error.message) }
+
+  const { data } = await supabase
+    .from('invites')
+    .select('token')
+    .eq('email', email.trim().toLowerCase())
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (!data?.token) return { error: null }
+  const inviteUrl = `${window.location.origin}${window.location.pathname}#/invite/${data.token}`
+  return { error: null, inviteUrl }
 }
 
 export async function acceptInvite(token: string): Promise<CoupleResult> {

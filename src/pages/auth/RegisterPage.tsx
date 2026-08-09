@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,9 @@ import { validateEmail, validatePassword, validateRequired } from '@/lib/validat
 export function RegisterPage() {
   const { signUp } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const inviteToken = searchParams.get('invite')
+  const invitePath = inviteToken ? `/invite/${inviteToken}` : null
 
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -46,10 +49,14 @@ export function RegisterPage() {
       return
     }
     if (result.needsConfirmation) {
-      setNotice('Te hemos enviado un email de confirmación. Revisa tu bandeja de entrada.')
+      setNotice(
+        invitePath
+          ? 'Te hemos enviado un email de confirmación. Confirma tu email y vuelve a abrir el enlace de la invitación.'
+          : 'Te hemos enviado un email de confirmación. Revisa tu bandeja de entrada.',
+      )
       return
     }
-    navigate('/create-couple', { replace: true })
+    navigate(invitePath ?? '/create-couple', { replace: true })
   }
 
   return (

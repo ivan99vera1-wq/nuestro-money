@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CheckCircle2, HeartHandshake } from 'lucide-react'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { Button } from '@/components/ui/button'
 import { LoadingScreen } from '@/components/ui/loading'
+import { useAuth } from '@/contexts/AuthContext'
 import { useCouple } from '@/contexts/CoupleContext'
 
 type State = 'loading' | 'success' | 'error'
 
 export function AcceptInvitePage() {
   const { token } = useParams<{ token: string }>()
+  const { user, loading: authLoading } = useAuth()
   const { acceptInvite } = useCouple()
   const navigate = useNavigate()
 
@@ -18,7 +20,7 @@ export function AcceptInvitePage() {
   const attempted = useRef(false)
 
   useEffect(() => {
-    if (!token || attempted.current) return
+    if (!token || attempted.current || authLoading || !user) return
     attempted.current = true
     void (async () => {
       const result = await acceptInvite(token)
@@ -30,10 +32,14 @@ export function AcceptInvitePage() {
         window.setTimeout(() => navigate('/dashboard', { replace: true }), 1500)
       }
     })()
-  }, [token, acceptInvite, navigate])
+  }, [token, acceptInvite, navigate, user, authLoading])
 
-  if (state === 'loading') {
+  if (authLoading || state === 'loading') {
     return <LoadingScreen label="Aceptando invitación…" />
+  }
+
+  if (!user) {
+    return <Navigate to={`/register?invite=${token}`} replace />
   }
 
   if (state === 'error') {
