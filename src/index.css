@@ -1,0 +1,136 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/sora';
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/*  NUESTRO MONEY — Design tokens                                       */
+/*  Premium, minimalist, mobile-first. Money green + deep green-ink.    */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  --font-sans:
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-display:
+    'Sora Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand: money green scale (light → deep) */
+  --color-brand-50: #f0fdf6;
+  --color-brand-100: #dbfded;
+  --color-brand-200: #b9f8dc;
+  --color-brand-300: #83efc4;
+  --color-brand-400: #46dfa4;
+  --color-brand-500: #1dcf8c;
+  --color-brand-600: #0fac73;
+  --color-brand-700: #0d875d;
+  --color-brand-800: #0f6a4c;
+  --color-brand-900: #0e5740;
+  --color-brand-950: #073123;
+
+  /* Income / positive */
+  --color-income-50: #ecfdf5;
+  --color-income-400: #34d399;
+  --color-income-500: #10b981;
+  --color-income-600: #059669;
+  --color-income-700: #047857;
+
+  /* Expense / negative */
+  --color-expense-50: #fef2f2;
+  --color-expense-400: #fb7185;
+  --color-expense-500: #f43f5e;
+  --color-expense-600: #e11d48;
+  --color-expense-700: #be123c;
+}
+
+/* Semantic tokens resolved at runtime so `dark` swaps them cleanly */
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+}
+
+:root {
+  --bg: #f5f6f5;
+  --surface: #ffffff;
+  --surface-2: #eef1ee;
+  --surface-3: #e6eae7;
+  --line: #e2e6e3;
+  --ink: #0c1210;
+  --ink-2: #4d5a53;
+  --ink-3: #8a9890;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #080d0a;
+  --surface: #101713;
+  --surface-2: #18211c;
+  --surface-3: #1e2a23;
+  --line: #1f2a24;
+  --ink: #eef3ef;
+  --ink-2: #9aa8a0;
+  --ink-3: #5f6e65;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--ink);
+    min-height: 100dvh;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-200);
+    color: var(--color-brand-950);
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Glass card used for the balance hero on the dashboard */
+  .glass-card {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.55));
+    backdrop-filter: blur(14px);
+  }
+  .dark .glass-card {
+    background:
+      linear-gradient(135deg, rgba(16, 23, 19, 0.85), rgba(16, 23, 19, 0.55));
+  }
+}
