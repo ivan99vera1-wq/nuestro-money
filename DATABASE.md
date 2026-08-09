@@ -131,7 +131,7 @@ Límite mensual virtual por categoría. **No modifica el saldo.**
 | `id` | uuid PK | |
 | `couple_id` | uuid FK → couples | CASCADE |
 | `category` | text | |
-| `limit` | bigint | Céntimos, CHECK `> 0` |
+| `limit_amount` | bigint | Céntimos, CHECK `> 0` (evita la palabra reservada `limit`) |
 | `created_at` / `updated_at` | timestamptz | |
 
 UNIQUE `(couple_id, category)`.

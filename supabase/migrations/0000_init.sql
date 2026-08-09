@@ -92,7 +92,7 @@ create table public.budgets (
   id uuid primary key default gen_random_uuid(),
   couple_id uuid not null references public.couples (id) on delete cascade,
   category text not null,
-  limit bigint not null check (limit > 0),
+  limit_amount bigint not null check (limit_amount > 0),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint budgets_couple_category_unique unique (couple_id, category)

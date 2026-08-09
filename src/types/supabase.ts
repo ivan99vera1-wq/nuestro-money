@@ -37,7 +37,22 @@ export interface Database {
         Row: CoupleMemberRow
         Insert: Partial<CoupleMemberRow>
         Update: Partial<CoupleMemberRow>
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'couple_members_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: true
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'couple_members_couple_id_fkey'
+            columns: ['couple_id']
+            isOneToOne: false
+            referencedRelation: 'couples'
+            referencedColumns: ['id']
+          },
+        ]
       }
       categories: {
         Row: CategoryRow
@@ -76,11 +91,8 @@ export interface Database {
         Relationships: []
       }
     }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      create_couple: {
+    Views: Record<string, never>
+    Functions: {      create_couple: {
         Args: { _name: string; _currency?: string }
         Returns: string
       }
@@ -100,9 +112,6 @@ export interface Database {
         Args: { _couple_id: string }
         Returns: CoupleStats
       }
-    }
-    Enums: {
-      [_ in never]: never
     }
   }
 }

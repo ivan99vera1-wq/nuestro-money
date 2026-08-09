@@ -8,7 +8,7 @@
  * Money columns are `bigint` minor units. Never floats.
  */
 
-export interface ProfileRow {
+export type ProfileRow = {
   id: string
   full_name: string | null
   avatar_url: string | null
@@ -17,7 +17,7 @@ export interface ProfileRow {
   updated_at: string
 }
 
-export interface CoupleRow {
+export type CoupleRow = {
   id: string
   name: string
   currency: string
@@ -29,7 +29,7 @@ export interface CoupleRow {
 
 export type CoupleMemberRole = 'owner' | 'member'
 
-export interface CoupleMemberRow {
+export type CoupleMemberRow = {
   id: string
   couple_id: string
   user_id: string
@@ -39,7 +39,7 @@ export interface CoupleMemberRow {
 
 export type TransactionTypeRow = 'income' | 'expense'
 
-export interface TransactionRow {
+export type TransactionRow = {
   id: string
   couple_id: string
   type: TransactionTypeRow
@@ -58,7 +58,7 @@ export interface TransactionRow {
   deleted_at: string | null
 }
 
-export interface CategoryRow {
+export type CategoryRow = {
   id: string
   type: TransactionTypeRow
   key: string
@@ -68,17 +68,17 @@ export interface CategoryRow {
   sort_order: number
 }
 
-export interface BudgetRow {
+export type BudgetRow = {
   id: string
   couple_id: string
   category: string
-  /** Monthly limit in integer minor units. */
-  limit: number
+  /** Monthly cap in integer minor units. */
+  limit_amount: number
   created_at: string
   updated_at: string
 }
 
-export interface SavingsGoalRow {
+export type SavingsGoalRow = {
   id: string
   couple_id: string
   name: string
@@ -102,7 +102,7 @@ export type NotificationTypeRow =
   | 'invite'
   | 'system'
 
-export interface NotificationRow {
+export type NotificationRow = {
   id: string
   couple_id: string
   user_id: string | null
@@ -116,7 +116,7 @@ export interface NotificationRow {
 
 export type InviteStatus = 'pending' | 'accepted' | 'expired' | 'cancelled'
 
-export interface InviteRow {
+export type InviteRow = {
   id: string
   couple_id: string
   inviter_id: string
@@ -130,14 +130,14 @@ export interface InviteRow {
 }
 
 /** Row shape returned by `get_couple_stats`. */
-export interface CoupleStats {
+export type CoupleStats = {
   member_count: number
   first_name: string | null
   second_name: string | null
 }
 
 /** Row shape returned by `get_balance`. */
-export interface BalanceResult {
+export type BalanceResult = {
   balance: number
   income: number
   expense: number
