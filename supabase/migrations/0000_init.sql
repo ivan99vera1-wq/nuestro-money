@@ -637,11 +637,12 @@ begin
 end;
 $$;
 
--- Balance and couple helpers (read-only, RLS-aware) --------------------------
+-- Balance and couple helpers (read-only, owner-run with an explicit member
+-- guard: the internal query must never depend on RLS) -------------------------
 create or replace function public.get_balance(_couple_id uuid)
 returns table (balance bigint, income bigint, expense bigint)
 language sql
-security invoker
+security definer
 set search_path = public
 stable
 as $$
@@ -650,13 +651,14 @@ as $$
     coalesce(sum(case when type = 'income' then amount else 0 end), 0) as income,
     coalesce(sum(case when type = 'expense' then amount else 0 end), 0) as expense
   from public.transactions
-  where couple_id = _couple_id and deleted_at is null;
+  where couple_id = _couple_id and deleted_at is null
+    and public.is_couple_member(_couple_id);
 $$;
 
 create or replace function public.get_couple_stats(_couple_id uuid)
 returns table (member_count bigint, first_name text, second_name text)
 language sql
-security invoker
+security definer
 set search_path = public
 stable
 as $$
@@ -666,7 +668,8 @@ as $$
     (array_agg(p.full_name order by p.id))[2] as second_name
   from public.couple_members cm
   join public.profiles p on p.id = cm.user_id
-  where cm.couple_id = _couple_id;
+  where cm.couple_id = _couple_id
+    and public.is_couple_member(_couple_id);
 $$;
 
 -- ============================================================================
