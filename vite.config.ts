@@ -33,7 +33,7 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
         start_url: '.',
-        scope: '/',
+        scope: './',
         lang: 'es',
         categories: ['finance', 'lifestyle'],
         icons: [
